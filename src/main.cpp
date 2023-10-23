@@ -2,23 +2,64 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#ifdef __unix__    /* __unix__ is usually defined by compilers targeting Unix systems */
+    #define OS_Windows 0
+    #include <unistd.h>
+    #include <stdlib.h>
+    #include <string.h>
+#elif defined(_WIN32) || defined(WIN32)    /* _Win32 is usually defined by compilers targeting 32 or   64 bit Windows systems */
+    #define OS_Windows 1
+    #include <windows.h>
+    #include <tchar.h>
+    // ?????????????
+    #define DIV 1048576
+    #define WIDTH 7
+#endif
+
+// use discrete GPU by default, instead of intel(R)HD Graphics
+#if defined(_WIN32) || defined(WIN32)                                           // if Windows
+extern "C" {
+    int discreteGPU() {
+        __declspec(dllexport) DWORD NvOptimusEnablement = 0;                    // NVidia GeForce
+        __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 0;     // AMD
+        return 1;
+    }
+}
+#endif
+
+// !!!!!!!!!!!!!!!!!!!!!WELLL THAT DOESN'T REALLY WORK RIGHT NOW
+#if defined(__unix__)                                                           // if Unix (Linux/MacOS)
+extern "C" {
+    int discreteGPU() {
+        //__attribute__((dllexport)) unsigned long NvOptimusEnablement = 0x00000001;           // NVidia Geforce
+        //__attribute__((dllexport)) int AmdPowerXpressRequestHighPerformance = 1;              // AMD 
+        return 1;
+    }
+}
+#endif
+
+
+// --------------------------------------- CALLBACKS --------------------------------------- 
 int g_windowSizeX = 640;
 int g_windowSizeY = 480;
 
-void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height){
+void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height) {
     g_windowSizeX = width;
     g_windowSizeY = height;
     glViewport(0, 0, g_windowSizeX, g_windowSizeY);
 }
 
-void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mode){
+void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(pWindow, GL_TRUE);
     }
 }
 
-int main(void)
-{
+int main(void) {
+    if (!discreteGPU()) {
+        std::cout << "discrete GPU not working\n";
+    }
+
     /* Init GLFW*/
     if (!glfwInit()){
         std::cout << "glfwInit failed\n";
@@ -57,7 +98,7 @@ int main(void)
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << "\n";
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
-    glClearColor(1, 1, 0, 1);
+    glClearColor(1, 0, 0, 10);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(pWindow))
