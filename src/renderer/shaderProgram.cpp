@@ -1,16 +1,17 @@
-# include "shaderProgram.hpp"
+#include "shaderProgram.hpp"
+#include "iostream"
 
 namespace renderer {
     shaderProgram::shaderProgram(const std::string& vertexShader, const std::string& fragmentShader) {
         GLuint vertexShaderID;
         if (!createShader(vertexShader, GL_VERTEX_SHADER, vertexShaderID)) { 
-            std::cerr << "VERTEX SHADER compile time error\n"
+            std::cerr << "VERTEX SHADER compile time error\n";
             return;
         }
 
         GLuint fragmentShaderID;
         if (!createShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentShaderID)) { 
-            std::cerr << "FRAGMENT SHADER compile time error\n"
+            std::cerr << "FRAGMENT SHADER compile time error\n";
             return;
         }
 
@@ -25,7 +26,6 @@ namespace renderer {
             GLchar infoLog[1024];
             glGetShaderInfoLog(m_ID, 1024, nullptr, infoLog);
             std::cerr << "ERROR::SHADER:Link time error:\n" << infoLog << "\n";
-            return false;
         }
         else {
             m_isCompiled = true;
@@ -60,7 +60,7 @@ namespace renderer {
         glUseProgram(m_ID);
     }
 
-    shaderProgram& shaderProgram::shaderProgram& operator= (shaderProgram&& shaderProgram) noexcept {
+    shaderProgram& shaderProgram::operator= (shaderProgram&& shaderProgram) noexcept {
         glDeleteProgram(m_ID);
         m_ID = shaderProgram.m_ID;
         m_isCompiled = shaderProgram.m_isCompiled;
@@ -68,7 +68,7 @@ namespace renderer {
         shaderProgram.m_ID = 0;
         shaderProgram.m_isCompiled = false;
 
-        return *this
+        return *this;
     }
     
     shaderProgram::shaderProgram (shaderProgram&& shaderProgram) noexcept {

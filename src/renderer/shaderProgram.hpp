@@ -22,5 +22,5 @@ namespace renderer {
       
       bool m_isCompiled = false;
       GLuint m_ID = 0;
-   }
+   };
 }
