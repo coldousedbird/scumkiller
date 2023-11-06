@@ -106,7 +106,7 @@ int main(int argc, char ** argv) {
     /* Make the window's context current */
     glfwMakeContextCurrent(pWindow);
     if(!gladLoadGL()){ 
-        std::cout << "gladLoadGL  failed\n";
+        std::cout << "gladLoadGL failed\n";
         return -1;
     }
     
@@ -122,6 +122,8 @@ int main(int argc, char ** argv) {
             std::cerr << "Can't create shader program: " << "DefaultShader" << "\n";
             return -1;
         }
+
+        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
 
         GLuint point_vbo = 0;
         glGenBuffers(1, &point_vbo);

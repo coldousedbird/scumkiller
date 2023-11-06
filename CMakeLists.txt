@@ -8,8 +8,11 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/renderer/shaderProgram.cpp
     src/renderer/shaderProgram.hpp
+    src/renderer/texture2D.cpp
+    src/renderer/texture2D.hpp
     src/resources/resourceManager.cpp
     src/resources/resourceManager.hpp
+    src/resources/stb_image.h
 )
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
