@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 project(scumkiller)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+set(CMAKE_CXX_STANDART - 20)
+
+add_executable(${PROJECT_NAME} 
+    src/main.cpp
+    src/renderer/shaderProgram.cpp
+    src/renderer/shaderProgram.hpp)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
